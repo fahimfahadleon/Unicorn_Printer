@@ -2,12 +2,14 @@ package com.unicornms.unicornprinter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -26,6 +28,9 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Button;
@@ -48,6 +53,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -59,23 +65,57 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper helper;
+    EditText name;
+    EditText phone;
+    EditText amount;
+    EditText PG;
+    EditText PN;
+    EditText TRXID;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Button scan = findViewById(R.id.scan);
         Button print = findViewById(R.id.print);
 
-        EditText name = findViewById(R.id.name);
-        EditText phone = findViewById(R.id.phone);
-        EditText amount = findViewById(R.id.amount);
-        EditText PG = findViewById(R.id.gateway);
-        EditText PN = findViewById(R.id.paymentPhone);
-        EditText TRXID = findViewById(R.id.trxid);
+         name = findViewById(R.id.name);
+         phone = findViewById(R.id.phone);
+         amount = findViewById(R.id.amount);
+         PG = findViewById(R.id.gateway);
+         PN = findViewById(R.id.paymentPhone);
+         TRXID = findViewById(R.id.trxid);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-       helper = new DatabaseHelper(this);
+        helper = new DatabaseHelper(this);
+        spinner = findViewById(R.id.spinner);
 
+
+
+        boolean b = Boolean.parseBoolean(getSharedPreference("isFirst","false"));
+        if(!b){
+            setSharedPreference("isFirst","true");
+            showInstruction();
+        }
+
+        List<String> mList = Arrays.asList("Bkash", "Rocket", "Nagad", "Upay", "MCash", "SureCash", "TAP");
+
+        // Create an adapter as shown below
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, mList);
+        spinner.setAdapter(mArrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                PG.setText(mList.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                PG.setText(null);
+            }
+
+        });
 
 
         try {
@@ -103,13 +143,13 @@ public class MainActivity extends AppCompatActivity {
                     } else if (TextUtils.isEmpty(amountstr)) {
                         amount.setError("Field can not be empty!");
                         amount.requestFocus();
-                    }else if (TextUtils.isEmpty(pg)) {
+                    } else if (TextUtils.isEmpty(pg)) {
                         PG.setError("Field can not be empty!");
                         PG.requestFocus();
-                    }else if (TextUtils.isEmpty(pn)) {
+                    } else if (TextUtils.isEmpty(pn)) {
                         PN.setError("Field can not be empty!");
                         PN.requestFocus();
-                    }else if (TextUtils.isEmpty(trx)) {
+                    } else if (TextUtils.isEmpty(trx)) {
                         TRXID.setError("Field can not be empty!");
                         TRXID.requestFocus();
                     } else {
@@ -127,29 +167,25 @@ public class MainActivity extends AppCompatActivity {
                         model.setUSERID(createRandom());
 
 
-
-
-
-
-
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("I", model.getUSERID());
                             jsonObject.put("T", trx);
                             jsonObject.put("A", amountstr);
                             jsonObject.put("D", currentDateandTime);
-//                            String s = "name:"+namestr;
-//                             s =s+ " id:"+idstr;
-//                             s =s+ " amount:"+amountstr;
-//                             s =s+ " time:"+currentDateandTime;
 
-                            String p ="[C]================================\n"+
-                                        "[L]Name: [R]"+namestr+"\n"+
-                                        "[L]Phone: [R]"+phonestr+"\n"+
-                                        "[L]Customer ID: [R]"+model.getUSERID()+"\n"+
-                                        "[L]Date: [R]"+model.getDATE()+"\n"+
-                                        "[C]================================\n"+
-                                        "[C]<qrcode size='30'>"+jsonObject+"</qrcode>";
+
+                            String p = "[C]================================\n" +
+                                    "[L]Name: [R]" + namestr + "\n" +
+                                    "[L]Phone: [R]" + phonestr + "\n" +
+                                    "[L]Customer ID: [R]" + model.getUSERID() + "\n" +
+                                    "[L]Amount: [R]" + model.getPAYAMOUNT() + "\n" +
+                                    "[L]Payment GW: [R]" + model.getPAYMENTGATEWAY() + "\n" +
+                                    "[L]Payment NO: [R]" + model.getPAYMENTPHONENUMBER() + "\n" +
+                                    "[L]Date: [R]" + model.getDATE() + "\n" +
+                                    "[C]================================\n" +
+                                    "\n" +
+                                    "[C]<qrcode size='30'>" + jsonObject + "</qrcode>";
                             try {
                                 EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
                                 printer.printFormattedText(p);
@@ -161,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                                 PN.setText(null);
                                 TRXID.setText(null);
                                 helper.saveMessage(model);
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         } catch (JSONException e) {
@@ -180,13 +216,27 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-
-
             requestPermissionMethod();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    AlertDialog alertDialog;
+    private void showInstruction() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Instruction");
+        builder.setMessage("Before using this app or print anything enable bluetooth and connect to your bluetooth printer.");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public static String createRandom() {
@@ -197,16 +247,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static SharedPreferences preferences;
-//    public static void setSharedPreference(String key, String value) {
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putString(key, value);
-//        editor.commit();
-//        editor.apply();// commit is important here.
-//    }
-//
-//    public static String getSharedPreference(String key, String defaultvalue) {
-//        return preferences.getString(key, defaultvalue);
-//    }
+    public static void setSharedPreference(String key, String value) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+        editor.apply();// commit is important here.
+    }
+
+    public static String getSharedPreference(String key, String defaultvalue) {
+        return preferences.getString(key, defaultvalue);
+    }
 
 
     private void requestPermissionMethod() {
@@ -280,21 +330,51 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void showScanResultDialog(JSONObject jsonObject){
-        AlertDialog dialog;
+    AlertDialog dialog;
+
+    void showScanResultDialog(JSONObject jsonObject) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View vi = getLayoutInflater().inflate(R.layout.result,null,false);
-        TextView name = vi.findViewById(R.id.name);
-        TextView id = vi.findViewById(R.id.id);
-        TextView amount = vi.findViewById(R.id.amount);
-        TextView date = vi.findViewById(R.id.date);
+        View vi = getLayoutInflater().inflate(R.layout.result, null, false);
+        TextView names = vi.findViewById(R.id.name);
+        TextView ids = vi.findViewById(R.id.id);
+        TextView amounts = vi.findViewById(R.id.amount);
+        TextView dates = vi.findViewById(R.id.date);
+        TextView paymentGateways = vi.findViewById(R.id.paymentgateway);
+        TextView paymentNumbers = vi.findViewById(R.id.paymentNumber);
+        TextView phoneNumbers = vi.findViewById(R.id.phone);
+        TextView trxids = vi.findViewById(R.id.transactionID);
+        Button newScan = vi.findViewById(R.id.newS);
+        newScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Log.e("clicked", "new Scan");
+                    name.setText(names.getText().toString());
+                    phone.setText(phoneNumbers.getText().toString());
+                   // amount.setText(amounts.getText().toString());
+                    PG.setText(paymentGateways.getText().toString());
+                    PN.setText(phoneNumbers.getText().toString());
+                   // TRXID.setText(trxids.getText().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                dialog.dismiss();
+            }
+        });
 
         try {
             String userID = jsonObject.getString("I");
             String trxID = jsonObject.getString("T");
+            Cursor c = helper.getUserDetails(userID, trxID);
+            Log.e("userID",userID);
+            Log.e("trxid",trxID);
 
-            Cursor c = helper.getUserDetails(userID,trxID);
-
+            if(c==null){
+                Toast.makeText(this, "Data Not Found", Toast.LENGTH_SHORT).show();
+                return;
+            }
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 String datestr = c.getString(c.getColumnIndexOrThrow(helper.DATE));
                 String namestr = c.getString(c.getColumnIndexOrThrow(helper.USERNAME));
@@ -304,39 +384,48 @@ public class MainActivity extends AppCompatActivity {
                 String amountstr = c.getString(c.getColumnIndexOrThrow(helper.PAYAMOUNT));
                 String payphnstr = c.getString(c.getColumnIndexOrThrow(helper.PAYMENTPHONENUMBER));
                 String trxid = c.getString(c.getColumnIndexOrThrow(helper.TRANSACTIONID));
-                Log.e("username",namestr);
-                Log.e("userid",idstr);
-                Log.e("userphone",phonestr);
-                Log.e("pg",pgstr);
-                Log.e("pn",payphnstr);
-                Log.e("trxID",trxid);
-                Log.e("date",datestr);
-                Log.e("amount",amountstr);
+
+                Log.e("Name", namestr);
+                Log.e("id", idstr);
+                Log.e("phone", phonestr);
+                Log.e("pg", pgstr);
+                Log.e("pn", payphnstr);
+                Log.e("amount", amountstr);
+                Log.e("trxid", trxid);
+                Log.e("date", datestr);
+
+                names.setText(namestr);
+                ids.setText(idstr);
+                amounts.setText(amountstr);
+                dates.setText(datestr);
+                paymentGateways.setText(pgstr);
+                paymentNumbers.setText(payphnstr);
+                phoneNumbers.setText(phonestr);
+                trxids.setText(trxid);
             }
 
+            c.close();
 
-            //get data from db
 
-
-//            name.setText("Name: "+jsonObject.getString("name"));
-//            id.setText("Phone: "+jsonObject.getString("id"));
-//            amount.setText("Amount: "+jsonObject.getString("amount"));
-//            date.setText("Date: "+jsonObject.getString("date"));
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e("error", e.toString());
         }
+
+
         builder.setView(vi);
         dialog = builder.create();
         dialog.show();
     }
+
     private void showInvoice(String text) {
         try {
             JSONObject jsonObject = new JSONObject(text);
             showScanResultDialog(jsonObject);
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(this, "Invalid Data", Toast.LENGTH_SHORT).show();
         }
-        Log.e("text",text);
+        Log.e("text", text);
 
     }
 

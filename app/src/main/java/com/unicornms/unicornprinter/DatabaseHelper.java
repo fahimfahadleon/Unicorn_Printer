@@ -60,23 +60,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void saveMessage(PaymentModel model){
-
             ContentValues values = new ContentValues();
             values.put(USERID, model.getUSERID());
             values.put(USERNAME,model.getUSERNAME());
             values.put(USERPHONE, model.getUSERPHONE());
             values.put(PAYMENTGATEWAY, model.getPAYMENTGATEWAY());
+            values.put(PAYMENTPHONENUMBER, model.getPAYMENTPHONENUMBER());
             values.put(PAYAMOUNT, model.getPAYAMOUNT());
             values.put(TRANSACTIONID, model.getTRANSACTIONID());
             values.put(DATE,model.getDATE());
             this.getWritableDatabase().insertOrThrow(TABLE_NAME, null, values);
-
-
     }
 
 
     public Cursor getUserDetails(String userID,String TRANSACTIONID) {
-        return this.getWritableDatabase().rawQuery( "select * from "+TABLE_NAME+" where userID = "+userID+" and TID = "+TRANSACTIONID+"", null );
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.rawQuery("select * from "+TABLE_NAME+" where userID = ? and TID = ?",new String[]{userID,TRANSACTIONID});
     }
 
 
