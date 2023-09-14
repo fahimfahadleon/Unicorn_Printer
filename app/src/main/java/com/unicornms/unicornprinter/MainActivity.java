@@ -24,7 +24,9 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -71,7 +73,15 @@ public class MainActivity extends AppCompatActivity {
     EditText PG;
     EditText PN;
     EditText TRXID;
+    EditText rateEDT;
+    EditText RMEDT;
     Spinner spinner;
+
+    TextView bank;
+    TextView others;
+    boolean isBanking = true;
+    JSONArray mobileBankinArray;
+    JSONArray bankingArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,33 +91,85 @@ public class MainActivity extends AppCompatActivity {
         Button scan = findViewById(R.id.scan);
         Button print = findViewById(R.id.print);
 
-         name = findViewById(R.id.name);
-         phone = findViewById(R.id.phone);
-         amount = findViewById(R.id.amount);
-         PG = findViewById(R.id.gateway);
-         PN = findViewById(R.id.paymentPhone);
-         TRXID = findViewById(R.id.trxid);
+        name = findViewById(R.id.name);
+        phone = findViewById(R.id.phone);
+        amount = findViewById(R.id.amount);
+        PG = findViewById(R.id.gateway);
+        PN = findViewById(R.id.paymentPhone);
+        TRXID = findViewById(R.id.trxid);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         helper = new DatabaseHelper(this);
         spinner = findViewById(R.id.spinner);
+        rateEDT = findViewById(R.id.rateEDT);
+        bank = findViewById(R.id.bank);
+        others = findViewById(R.id.others);
+        RMEDT = findViewById(R.id.converted);
+        List<String> initialmobileBanking = Arrays.asList("Bkash", "Nagad", "FAX", "Others");
+        List<String> initialbanks = Arrays.asList("Sonali Bank","Agrani Bank","Pubali Bank","Krishi Bank","IBBL","DBBL","Prime Bank","Others");
 
 
+        List<String>finalmobileBanking = new ArrayList<>();
+        List<String>finalBanking = new ArrayList<>();
 
-        boolean b = Boolean.parseBoolean(getSharedPreference("isFirst","false"));
-        if(!b){
-            setSharedPreference("isFirst","true");
-            showInstruction();
+        try {
+             mobileBankinArray = new JSONArray(getSharedPreference("mb","{}"));
+             bankingArray = new JSONArray(getSharedPreference("b","{}"));
+
+            if(mobileBankinArray.length() == 0){
+                for(String s:initialmobileBanking){
+                    mobileBankinArray.put(s);
+                }
+                setSharedPreference("mb",mobileBankinArray.toString());
+            }else {
+                for(int i=0;i<mobileBankinArray.length();i++){
+                    finalmobileBanking.add(mobileBankinArray.getString(i));
+                }
+            }
+            if(bankingArray.length() == 0){
+                for(String s: initialbanks){
+                    bankingArray.put(s);
+                }
+                setSharedPreference("b",bankingArray.toString());
+            }else {
+                for(int i=0;i<bankingArray.length();i++){
+                    finalBanking.add(bankingArray.getString(i));
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        List<String> mList = Arrays.asList("Bkash", "Rocket", "Nagad", "Upay", "MCash", "SureCash", "TAP");
 
-        // Create an adapter as shown below
-        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, mList);
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, finalBanking);
         spinner.setAdapter(mArrayAdapter);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                PG.setText(mList.get(position));
+                String s = finalBanking.get(position);
+                PG.setText(s);
+                PG.setEnabled(s.equals("Others"));
+
             }
 
             @Override
@@ -116,6 +178,82 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+
+        bank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                bank.setBackgroundColor(Color.parseColor("#58FF58"));
+                others.setBackgroundColor(Color.parseColor("#ffffff"));
+
+
+                // Create an adapter as shown below
+                ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, finalBanking);
+                spinner.setAdapter(mArrayAdapter);
+
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        String s = finalBanking.get(position);
+                        PG.setText(s);
+                        PG.setEnabled(s.equals("Others"));
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                        PG.setText(null);
+                    }
+
+                });
+            }
+        });
+        others.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                bank.setBackgroundColor(Color.parseColor("#ffffff"));
+                others.setBackgroundColor(Color.parseColor("#58FF58"));
+                // Create an adapter as shown below
+                ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, finalmobileBanking);
+                spinner.setAdapter(mArrayAdapter);
+
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        String s = finalmobileBanking.get(position);
+                        PG.setText(s);
+                        PG.setEnabled(s.equals("Others"));
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                        PG.setText(null);
+                    }
+
+                });
+            }
+        });
+
+
+        if (getSharedPreference("rate", "asdf").equals("asdf")) {
+            rateEDT.setError(null);
+        } else {
+            rateEDT.setText(getSharedPreference("rate", "asdf"));
+        }
+
+
+        boolean b = Boolean.parseBoolean(getSharedPreference("isFirst", "false"));
+        if (!b) {
+            setSharedPreference("isFirst", "true");
+            showInstruction();
+        }
+
+
+
+
+
 
 
         try {
@@ -134,6 +272,9 @@ public class MainActivity extends AppCompatActivity {
                     String pg = PG.getText().toString();
                     String pn = PN.getText().toString();
                     String trx = TRXID.getText().toString();
+
+                    String rateStr = rateEDT.getText().toString();
+
                     if (TextUtils.isEmpty(namestr)) {
                         name.setError("Field can not be empty!");
                         name.requestFocus();
@@ -152,7 +293,25 @@ public class MainActivity extends AppCompatActivity {
                     } else if (TextUtils.isEmpty(trx)) {
                         TRXID.setError("Field can not be empty!");
                         TRXID.requestFocus();
+                    } else if (TextUtils.isEmpty(rateStr)) {
+                        rateEDT.setError("Field Can Not Be Empty!");
+                        rateEDT.requestFocus();
                     } else {
+
+                        setSharedPreference("rate", rateStr);
+
+                        if(isBanking){
+                            if(!finalBanking.contains(pg)){
+                                bankingArray.put(pg);
+                                setSharedPreference("b",bankingArray.toString());
+                            }
+                        }else {
+                            if(!finalmobileBanking.contains(pg)){
+                                mobileBankinArray.put(pg);
+                                setSharedPreference("mb",mobileBankinArray.toString());
+                            }
+                        }
+
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
                         String currentDateandTime = sdf.format(new Date());
 
@@ -222,7 +381,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     AlertDialog alertDialog;
+
     private void showInstruction() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -247,6 +408,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static SharedPreferences preferences;
+
     public static void setSharedPreference(String key, String value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
@@ -352,10 +514,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("clicked", "new Scan");
                     name.setText(names.getText().toString());
                     phone.setText(phoneNumbers.getText().toString());
-                   // amount.setText(amounts.getText().toString());
+                    // amount.setText(amounts.getText().toString());
                     PG.setText(paymentGateways.getText().toString());
                     PN.setText(phoneNumbers.getText().toString());
-                   // TRXID.setText(trxids.getText().toString());
+                    // TRXID.setText(trxids.getText().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -368,10 +530,10 @@ public class MainActivity extends AppCompatActivity {
             String userID = jsonObject.getString("I");
             String trxID = jsonObject.getString("T");
             Cursor c = helper.getUserDetails(userID, trxID);
-            Log.e("userID",userID);
-            Log.e("trxid",trxID);
+            Log.e("userID", userID);
+            Log.e("trxid", trxID);
 
-            if(c==null){
+            if (c == null) {
                 Toast.makeText(this, "Data Not Found", Toast.LENGTH_SHORT).show();
                 return;
             }

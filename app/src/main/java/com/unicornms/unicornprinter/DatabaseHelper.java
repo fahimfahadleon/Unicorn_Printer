@@ -13,8 +13,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private  String TABLE_NAME = "USERTABLE";
     private  final String ID = "id";
     public final String USERID = "userID";
-    public  final String USERNAME = "userName";
-    public  final String USERPHONE = "userPhone";
+    public  final String USERNAME = "receiverName";
+    public  final String USERPHONE = "Phone";
     public  final String PAYMENTGATEWAY = "PG";
 
     public  final String PAYMENTPHONENUMBER = "PN";
