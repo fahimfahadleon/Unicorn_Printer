@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "printer";
 
@@ -16,9 +20,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public  final String USERNAME = "receiverName";
     public  final String USERPHONE = "Phone";
     public  final String PAYMENTGATEWAY = "PG";
+    public  final String RECEIVERS_PHONE = "receiversPhone";
+    public  final String ADDRESS = "address";
+    public  final String ISPERSONAL = "isPersonal";
 
     public  final String PAYMENTPHONENUMBER = "PN";
     public  final String PAYAMOUNT = "PA";
+    public  final String PAYAMOUNTRM = "RMAmount";
+    public  final String RMRATE = "RMRate";
     public  final String TRANSACTIONID = "TID";
     public  final String DATE = "date";
 
@@ -40,6 +49,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + USERPHONE + " TEXT, "
                 + PAYMENTGATEWAY + " TEXT, "
                 + PAYMENTPHONENUMBER + " TEXT, "
+                + RECEIVERS_PHONE + " TEXT, "
+                + ADDRESS + " TEXT, "
+                + ISPERSONAL + " TEXT, "
+                + PAYAMOUNTRM + " TEXT, "
+                + RMRATE + " TEXT, "
                 + PAYAMOUNT + " TEXT, "
                 + TRANSACTIONID + " TEXT UNIQUE, "
                 + DATE + " TEXT)";
@@ -62,13 +76,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void saveMessage(PaymentModel model){
             ContentValues values = new ContentValues();
             values.put(USERID, model.getUSERID());
-            values.put(USERNAME,model.getUSERNAME());
+            values.put(USERNAME,model.getRECEIVERNAME());
             values.put(USERPHONE, model.getUSERPHONE());
             values.put(PAYMENTGATEWAY, model.getPAYMENTGATEWAY());
             values.put(PAYMENTPHONENUMBER, model.getPAYMENTPHONENUMBER());
-            values.put(PAYAMOUNT, model.getPAYAMOUNT());
+            values.put(PAYAMOUNT, model.getPAYMENNT_BDT());
             values.put(TRANSACTIONID, model.getTRANSACTIONID());
             values.put(DATE,model.getDATE());
+            values.put(RECEIVERS_PHONE,model.getRECEIVERS_PHONE());
+            values.put(RMRATE,model.getRM_RATE());
+            values.put(PAYAMOUNTRM,model.getPAYMENT_RM());
+            values.put(ISPERSONAL,model.getISPERSONAL());
+            values.put(ADDRESS,model.getADDRESS());
             this.getWritableDatabase().insertOrThrow(TABLE_NAME, null, values);
     }
 
@@ -79,6 +98,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getTodayHistory(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String currentDateandTime = sdf.format(new Date());
+
+        return db.rawQuery("select * from "+TABLE_NAME+" where date = ?",new String[]{currentDateandTime});
+    }
 
 
 

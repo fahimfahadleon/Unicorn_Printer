@@ -67,7 +67,6 @@
                 android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
-
                 android:layout_height="wrap_content">
 
 
@@ -75,6 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:orientation="horizontal">
 
@@ -217,7 +217,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
-                    android:inputType="text"
+                    android:inputType="phone"
                     android:textColor="#000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -248,7 +248,7 @@
                         android:layout_marginEnd="8dp"
 
                         android:layout_marginBottom="8dp"
-                        android:inputType="numberDecimal"
+                        android:inputType="text"
                         android:textColor="#000"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -388,7 +388,7 @@
                     <Spinner
                         android:id="@+id/spinner"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="@id/gateway"
@@ -403,60 +403,99 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Payment Phone Number"
+                    android:text="Payment Number"
                     android:textColorHint="#191919"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/gateway" />
 
-                <EditText
-                    android:id="@+id/paymentPhone"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:inputType="phone"
-                    android:textColor="#000"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/pnText" />
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/paymentPhone"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:inputType="phone"
+                        android:textColor="#000"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pnText" />
 
-                <TextView
-                    android:id="@+id/txitText"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/chooser"
+                        android:visibility="gone"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Agent"
+                            android:gravity="center"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:layout_marginEnd="8dp"
+                            android:background="#58FF58"
+                            android:id="@+id/agentText"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Personal"
+                            android:paddingStart="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:paddingEnd="8dp"
+                            android:gravity="center"
+                            android:id="@+id/personalText"/>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+
+
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Transaction ID"
-                    android:textColorHint="#191919"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/paymentPhone" />
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/trxid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:inputType="text"
-                    android:textColor="#000"
-
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txitText" />
+                    <Button
+                        android:id="@+id/print"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Print"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pnText" />
 
 
-                <Button
-                    android:id="@+id/print"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="Print"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/trxid" />
+                    <Button
+                        android:id="@+id/checkHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Today's History"
+                        android:backgroundTint="#E68888"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pnText" />
+                </LinearLayout>
+
 
 
                 <LinearLayout

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,323 +22,484 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/namelayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:gravity="center"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
 
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
 
-            android:padding="4dp"
-            android:text="Name: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+               android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="name: abul"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            />
-    </LinearLayout>
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
 
 
-    <LinearLayout
-        android:id="@+id/idlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/namelayout"
-        android:orientation="horizontal">
+                   android:padding="4dp"
+                   android:text="Rec Name: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="User ID: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+               <TextView
+                   android:id="@+id/name"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="name: abul"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   />
+           </LinearLayout>
 
-        <TextView
-            android:id="@+id/id"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="id"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            />
-    </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
 
-    <LinearLayout
-        android:id="@+id/amountlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idlayout"
-        android:orientation="horizontal">
+               android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="Amount: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="Sender Phone: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
-        <TextView
-            android:id="@+id/amount"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="1200"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idlayout" />
-    </LinearLayout>
+               <TextView
+                   android:id="@+id/phone"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="01914616453"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/paymentgatewayLayout" />
+
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="Receiver Phone: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
-    <LinearLayout
-        android:id="@+id/dateLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountlayout"
-        android:orientation="horizontal">
+               <TextView
+                   android:id="@+id/receiverphone"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="01914616453"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/paymentgatewayLayout" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="Date: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+           </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="12/12/13"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/amountlayout" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/paymentnumberlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateLayout"
-        android:orientation="horizontal">
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="Payment Number: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+               android:orientation="horizontal">
 
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="User ID: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
 
+               <TextView
+                   android:id="@+id/id"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="id"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   />
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/paymentNumber"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="01756545154"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateLayout" />
-    </LinearLayout>
+               android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/transactionIDLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentnumberlayout"
-        android:orientation="horizontal">
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="Address: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="Transaction: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+               <TextView
+                   android:id="@+id/address"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="Address"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   />
+           </LinearLayout>
 
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/transactionID"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="Tasdfa123"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/paymentnumberlayout" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/paymentgatewayLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transactionIDLayout"
-        android:orientation="horizontal">
+               android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="Payment Gateway: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="RM Amount: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
-        <TextView
-            android:id="@+id/paymentgateway"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="bkash"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/transactionIDLayout" />
-    </LinearLayout>
+               <TextView
+                   android:id="@+id/rmamount"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="1200"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/idlayout" />
+           </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/phoneLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentgatewayLayout"
-        android:orientation="horizontal">
+           <LinearLayout
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="Phone: "
-            android:gravity="center|end"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="BDT Amount: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
-        <TextView
-            android:id="@+id/phone"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp"
-            android:text="01914616453"
-            android:gravity="center|start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/paymentgatewayLayout" />
+               <TextView
+                   android:id="@+id/bdtamount"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="1200"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/idlayout" />
+           </LinearLayout>
+           <LinearLayout
 
-    </LinearLayout>
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="RM Rate: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+               <TextView
+                   android:id="@+id/rmRate"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="1200"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/idlayout" />
+           </LinearLayout>
 
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="Make Payment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/phoneLayout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_margin="16dp"
-        android:padding="4dp"
-        android:id="@+id/newS"/>
-    
-</androidx.constraintlayout.widget.ConstraintLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="Date: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+               <TextView
+                   android:id="@+id/date"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="12/12/13"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/amountlayout" />
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="AC/MOB NO: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+
+               <TextView
+                   android:id="@+id/paymentNumber"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="01756545154"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/dateLayout" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="Transaction: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+               <TextView
+                   android:id="@+id/transactionID"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="Tasdfa123"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/paymentnumberlayout" />
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="Payment GW: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+               <TextView
+                   android:id="@+id/paymentgateway"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="bkash"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/transactionIDLayout" />
+           </LinearLayout>
+
+           <LinearLayout
+
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:padding="4dp"
+                   android:text="Payment Type: "
+                   android:gravity="center|end"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+               <TextView
+                   android:id="@+id/paymenttype"
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:layout_marginEnd="16dp"
+                   android:layout_marginBottom="16dp"
+                   android:padding="4dp"
+                   android:text="Personal"
+                   android:gravity="center|start"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/transactionIDLayout" />
+           </LinearLayout>
+
+
+
+
+
+
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:paddingStart="16dp"
+               android:paddingEnd="16dp"
+               android:text="Make Payment"
+               android:layout_marginBottom="16dp"
+               android:layout_margin="16dp"
+               android:padding="4dp"
+               android:id="@+id/newS"/>
+
+       </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

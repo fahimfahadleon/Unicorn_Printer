@@ -2,15 +2,75 @@ package com.unicornms.unicornprinter;
 
 public class PaymentModel {
 
-    private   String USERID = "userID";
-    private   String USERNAME = "userName";
-    private   String USERPHONE = "userPhone";
-    private   String PAYMENTGATEWAY = "PG";
+    private   String USERID = "";
+    private   String RECEIVERNAME = "";
+    private   String USERPHONE = "";
+    private   String PAYMENTGATEWAY = "";
+    private   String RECEIVERS_PHONE = "";
+    private   String ADDRESS = "";
+    private   String ISPERSONAL = "";
+    private   String PAYMENTPHONENUMBER = "";
 
-    private   String PAYMENTPHONENUMBER = "PN";
-    private   String PAYAMOUNT = "PA";
-    private   String TRANSACTIONID = "TID";
-    private   String DATE = "date";
+    private   String TRANSACTIONID = "";
+    private   String PAYMENT_RM = "";
+    private   String PAYMENNT_BDT = "";
+    private   String RM_RATE = "";
+    private   String DATE = "";
+
+    public String getADDRESS() {
+        return ADDRESS;
+    }
+
+    public void setADDRESS(String ADDRESS) {
+        this.ADDRESS = ADDRESS;
+    }
+
+    public String getISPERSONAL() {
+        return ISPERSONAL;
+    }
+
+    public String getRECEIVERNAME() {
+        return RECEIVERNAME;
+    }
+
+    public void setRECEIVERNAME(String RECEIVERNAME) {
+        this.RECEIVERNAME = RECEIVERNAME;
+    }
+
+    public void setISPERSONAL(String ISPERSONAL) {
+        this.ISPERSONAL = ISPERSONAL;
+    }
+    public String getRECEIVERS_PHONE() {
+        return RECEIVERS_PHONE;
+    }
+
+    public void setRECEIVERS_PHONE(String RECEIVERS_PHONE) {
+        this.RECEIVERS_PHONE = RECEIVERS_PHONE;
+    }
+
+    public String getPAYMENT_RM() {
+        return PAYMENT_RM;
+    }
+
+    public void setPAYMENT_RM(String PAYMENT_RM) {
+        this.PAYMENT_RM = PAYMENT_RM;
+    }
+
+    public String getPAYMENNT_BDT() {
+        return PAYMENNT_BDT;
+    }
+
+    public void setPAYMENNT_BDT(String PAYMENNT_BDT) {
+        this.PAYMENNT_BDT = PAYMENNT_BDT;
+    }
+
+    public String getRM_RATE() {
+        return RM_RATE;
+    }
+
+    public void setRM_RATE(String RM_RATE) {
+        this.RM_RATE = RM_RATE;
+    }
 
     public String getUSERID() {
         return USERID;
@@ -20,13 +80,7 @@ public class PaymentModel {
         this.USERID = USERID;
     }
 
-    public String getUSERNAME() {
-        return USERNAME;
-    }
 
-    public void setUSERNAME(String USERNAME) {
-        this.USERNAME = USERNAME;
-    }
 
     public String getUSERPHONE() {
         return USERPHONE;
@@ -52,13 +106,7 @@ public class PaymentModel {
         this.PAYMENTPHONENUMBER = PAYMENTPHONENUMBER;
     }
 
-    public String getPAYAMOUNT() {
-        return PAYAMOUNT;
-    }
 
-    public void setPAYAMOUNT(String PAYAMOUNT) {
-        this.PAYAMOUNT = PAYAMOUNT;
-    }
 
     public String getTRANSACTIONID() {
         return TRANSACTIONID;
