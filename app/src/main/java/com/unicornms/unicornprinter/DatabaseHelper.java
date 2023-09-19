@@ -11,24 +11,24 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "printer";
+    public static final String DATABASE_NAME = "printer.db";
 
     private static final int DATABASE_VERSION = 1;
     private  String TABLE_NAME = "USERTABLE";
     private  final String ID = "id";
     public final String USERID = "userID";
-    public  final String USERNAME = "receiverName";
-    public  final String USERPHONE = "Phone";
-    public  final String PAYMENTGATEWAY = "PG";
-    public  final String RECEIVERS_PHONE = "receiversPhone";
-    public  final String ADDRESS = "address";
-    public  final String ISPERSONAL = "isPersonal";
+    public  final String USERNAME = "ReceiverName";
+    public  final String USERPHONE = "SenderPhone";
+    public  final String PAYMENTGATEWAY = "PaymentGateway";
+    public  final String RECEIVERS_PHONE = "ReceiversPhone";
+    public  final String ADDRESS = "ReceiversAddress";
+    public  final String ISPERSONAL = "AgentorPersonal";
 
-    public  final String PAYMENTPHONENUMBER = "PN";
-    public  final String PAYAMOUNT = "PA";
-    public  final String PAYAMOUNTRM = "RMAmount";
+    public  final String PAYMENTPHONENUMBER = "AC_OR_MOB";
+    public  final String PAYAMOUNT = "PaymentAmountBDT";
+    public  final String PAYAMOUNTRM = "PaymentAmountRM";
     public  final String RMRATE = "RMRate";
-    public  final String TRANSACTIONID = "TID";
+    public  final String TRANSACTIONID = "TransactionID";
     public  final String DATE = "date";
 
 

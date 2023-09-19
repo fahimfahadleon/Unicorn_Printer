@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 
@@ -8,6 +10,9 @@ android {
     namespace 'com.unicornms.unicornprinter'
     compileSdk 33
 
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId "com.unicornms.unicornprinter"
         minSdk 26
@@ -35,10 +40,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.3'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.3.0'
     implementation 'com.github.androidmads:QRGenerator:1.0.1'
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
+
+    implementation "com.anggrayudi:storage:1.5.5"
+    implementation 'com.liyu.tools:sqlitetoexcel:1.0.10'
 }

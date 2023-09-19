@@ -39,10 +39,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = "receiver: "+holder.receiverPhone.getText().toString()+"\n"+
+                String s = "Receiver: "+holder.receiverPhone.getText().toString()+"\n"+
+                         "AC/MOB NO: "+model.getPAYMENTPHONENUMBER()+"\n"+
                         "Payment GW: "+holder.type.getText().toString()+"\n"+
                         "BDT: "+holder.amount.getText().toString()+"\n"+
-                        "type: "+holder.isPersonal.getText().toString();
+                        "Type: "+holder.isPersonal.getText().toString();
 
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("txt", s);

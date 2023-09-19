@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "403123863720",
+    "firebase_url": "https://easy-business-card-9d658-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "easy-business-card-9d658",
+    "storage_bucket": "easy-business-card-9d658.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403123863720:android:9bcb4ee8a5b61544eb029d",
+        "android_client_info": {
+          "package_name": "com.unicornms.unicornprinter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403123863720-k6abd4on4ftc3ds3naerrjghltccvfet.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQRHvLgZhXs7qsi30JexyI4o6rvOBHq4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403123863720-k6abd4on4ftc3ds3naerrjghltccvfet.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

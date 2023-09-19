@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="sender Number"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/senderNumber"/>
@@ -29,7 +29,7 @@
             android:text="receiver Number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/senderNumber"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:id="@+id/receiverNumber"/>
         <TextView
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
             app:layout_constraintStart_toEndOf="@id/senderNumber"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:id="@+id/type"/>
         <TextView
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             app:layout_constraintStart_toEndOf="@id/receiverNumber"
             app:layout_constraintTop_toBottomOf="@id/type"
             android:layout_marginStart="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:id="@+id/isPersonal"/>
         <TextView
             android:layout_width="wrap_content"
