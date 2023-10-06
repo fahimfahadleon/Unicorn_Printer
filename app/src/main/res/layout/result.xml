@@ -60,7 +60,6 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="name: abul"
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    />
@@ -93,7 +92,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="01914616453"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -128,7 +127,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="01914616453"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -164,7 +163,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="id"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    />
@@ -195,7 +194,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="Address"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    />
@@ -228,7 +227,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="1200"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -263,7 +262,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="1200"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -297,7 +296,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="1200"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -333,7 +332,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="12/12/13"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -368,7 +367,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="01756545154"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -403,7 +402,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="Tasdfa123"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -437,7 +436,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="bkash"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"
@@ -472,7 +471,7 @@
                    android:layout_marginEnd="16dp"
                    android:layout_marginBottom="16dp"
                    android:padding="4dp"
-                   android:text="Personal"
+
                    android:gravity="center|start"
                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                    app:layout_constraintEnd_toEndOf="parent"

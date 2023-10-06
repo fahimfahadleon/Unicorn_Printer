@@ -38,6 +38,8 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -58,7 +60,12 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.dantsu.escposprinter.EscPosPrinter;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
+import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
+import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
+import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
+import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg;
 import com.google.zxing.Result;
 import com.liyu.sqlitetoexcel.SQLiteToExcel;
@@ -108,7 +115,12 @@ public class MainActivity extends AppCompatActivity {
     TextView agentText;
     TextView personalText;
     TextView others;
-    boolean isBanking = true;
+    TextView fax;
+    TextView addresstext;
+    private static final int BANKING_TYPE_BANK = 0;
+    private static final int BANKING_TYPE_MOBILE_BANK = 1;
+    private static final int BANKING_TYPE_FAX = 2;
+    int isBanking = 0;
     JSONArray mobileBankinArray;
     JSONArray bankingArray;
     TextWatcher amountTextWatcher;
@@ -128,6 +140,47 @@ public class MainActivity extends AppCompatActivity {
     List<String> finalBanking;
 
     SimpleStorageHelper storageHelper = new SimpleStorageHelper(this);
+
+    void export(String query,String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+        } else {
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+            if (!dir.exists()) {
+                boolean b = dir.mkdirs();
+                Log.e("valueofB", String.valueOf(b));
+            }
+
+
+            new SQLiteToExcel
+                    .Builder(MainActivity.this)
+                    .setDataBase(getDatabasePath(DatabaseHelper.DATABASE_NAME).getAbsolutePath())
+//                            .setSQL("select * from USERTABLE")
+                    .setSQL(query)
+                    .setOutputPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath())
+                    //Optional, if null, default output path is app ExternalFilesDir.
+                    .setOutputFileName(name)
+                    .start(new SQLiteToExcel.ExportListener() {
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        @Override
+                        public void onCompleted(String filePath) {
+                            Toast.makeText(MainActivity.this, "Exported to Documents (Name: "+name+")!", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Toast.makeText(MainActivity.this, "Something went wrong while exporting!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+        }
+
+    }
 
 
     @Override
@@ -149,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
         PG = findViewById(R.id.gateway);
         PN = findViewById(R.id.paymentPhone);
         checkHistory = findViewById(R.id.checkHistory);
+        fax = findViewById(R.id.fax);
+        addresstext = findViewById(R.id.addresstext);
 
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -167,47 +222,106 @@ public class MainActivity extends AppCompatActivity {
         export = findViewById(R.id.export);
 
 
+
+
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-                } else {
-                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-                    if (!dir.exists()) {
-                        boolean b = dir.mkdirs();
-                        Log.e("valueofB", String.valueOf(b));
+                AlertDialog dialog1;
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                View vi = getLayoutInflater().inflate(R.layout.date_chooser, null, false);
+//                EditText startDate = vi.findViewById(R.id.startDate);
+//                EditText endDate = vi.findViewById(R.id.endDate);
+                Button export = vi.findViewById(R.id.export);
+                Button exportall = vi.findViewById(R.id.exportall);
+                export.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        String s = startDate.getText().toString();
+//                        String e = endDate.getText().toString();
+//                        if (TextUtils.isEmpty(s)) {
+//                            startDate.setError("Field Can Not Be Empty!");
+//                            startDate.requestFocus();
+//                        } else if (TextUtils.isEmpty(e)) {
+//                            endDate.setError("Field Can Not Be Empty!");
+//                            endDate.requestFocus();
+//                        } else {
+//
+//
+//                        }
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        String currentDateandTime = sdf.format(new Date());
+
+                        String query = "select * from USERTABLE where date = '" + currentDateandTime + "'";
+//                            String query = "SELECT * FROM USERTABLE WHERE date BETWEEN '" + startDate + "' AND '" + endDate + "'";
+//                            String query = "SELECT * FROM USERTABLE WHERE date BETWEEN '" + startDate + "' AND '" + endDate + "'";
+                        export(query,currentDateandTime+".xls");
+
                     }
+                });
+                exportall.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String query = "select * from USERTABLE";
+                        export(query,"Exported.xls");
+                    }
+                });
 
 
-                    Log.e("publicDirectory", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+                builder.setView(vi);
+                dialog1 = builder.create();
+                dialog1.show();
 
-                    new SQLiteToExcel
-                            .Builder(MainActivity.this)
-                            .setDataBase(getDatabasePath(DatabaseHelper.DATABASE_NAME).getAbsolutePath())
-                            .setSQL("select * from USERTABLE")
-                            .setOutputPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath())
-                            //Optional, if null, default output path is app ExternalFilesDir.
-                            .setOutputFileName("exportedFile.xls")
-                            .start(new SQLiteToExcel.ExportListener() {
-                                @Override
-                                public void onStart() {
-
-                                }
-
-                                @Override
-                                public void onCompleted(String filePath) {
-                                    Toast.makeText(MainActivity.this, "Exported to Documents (Name: exportedFile.xls)!", Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    Toast.makeText(MainActivity.this, "Something went wrong while exporting!", Toast.LENGTH_SHORT).show();
-
-                                }
-                            });
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+//                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+//                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+//                } else {
+//                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+//                    if (!dir.exists()) {
+//                        boolean b = dir.mkdirs();
+//                        Log.e("valueofB", String.valueOf(b));
+//                    }
+//
+//
+//
+//
+//
+//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+//                    String currentDateandTime = sdf.format(new Date());
+//
+//                    String query = "select * from USERTABLE where date = '"+currentDateandTime+"'";
+//
+//
+//
+//
+//                    new SQLiteToExcel
+//                            .Builder(MainActivity.this)
+//                            .setDataBase(getDatabasePath(DatabaseHelper.DATABASE_NAME).getAbsolutePath())
+////                            .setSQL("select * from USERTABLE")
+//                            .setSQL(query)
+//                            .setOutputPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath())
+//                            //Optional, if null, default output path is app ExternalFilesDir.
+//                            .setOutputFileName(currentDateandTime+".xls")
+//                            .start(new SQLiteToExcel.ExportListener() {
+//                                @Override
+//                                public void onStart() {
+//
+//                                }
+//
+//                                @Override
+//                                public void onCompleted(String filePath) {
+//                                    Toast.makeText(MainActivity.this, "Exported to Documents (Name: "+currentDateandTime+".xls)!", Toast.LENGTH_LONG).show();
+//                                }
+//
+//                                @Override
+//                                public void onError(Exception e) {
+//                                    Log.e("eror",e.toString());
+//                                    Toast.makeText(MainActivity.this, "Something went wrong while exporting!", Toast.LENGTH_SHORT).show();
+//
+//                                }
+//                            });
+//                }
             }
         });
 
@@ -235,17 +349,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bank.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isBanking = true;
-                addressLayout.setVisibility(View.VISIBLE);
-                chooser.setVisibility(View.GONE);
-            }
-        });
 
-
-        List<String> initialmobileBanking = Arrays.asList("Bkash", "Nagad", "FAX", "Others");
+        List<String> initialmobileBanking = Arrays.asList("Bkash", "Nagad", "Others");
         List<String> initialbanks = Arrays.asList("Sonali Bank", "Agrani Bank", "Pubali Bank", "Krishi Bank", "IBBL", "DBBL", "Prime Bank", "Others");
 
 
@@ -301,10 +406,10 @@ public class MainActivity extends AppCompatActivity {
                             String msg = String.valueOf(d * Double.parseDouble(charSequence.toString()));
                             amount.setText(msg);
                         } catch (Exception e) {
-                            amount.setText(String.valueOf(0));
+                            amount.setText(String.valueOf(1));
                         }
                     } else {
-                        amount.setText(String.valueOf(0));
+                        amount.setText(String.valueOf(1));
                     }
                 }
 
@@ -334,10 +439,10 @@ public class MainActivity extends AppCompatActivity {
                             String msg = String.valueOf(Double.parseDouble(charSequence.toString()) / d);
                             RMEDT.setText(msg);
                         } catch (Exception e) {
-                            RMEDT.setText(String.valueOf(0));
+                            RMEDT.setText(String.valueOf(1));
                         }
                     } else {
-                        RMEDT.setText(String.valueOf(0));
+                        RMEDT.setText(String.valueOf(1));
                     }
                 }
             }
@@ -393,19 +498,22 @@ public class MainActivity extends AppCompatActivity {
         bank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TransitionManager.beginDelayedTransition(findViewById(R.id.animationid), new AutoTransition());
+                isBanking = BANKING_TYPE_BANK;
                 bank.setBackgroundColor(Color.parseColor("#58FF58"));
                 others.setBackgroundColor(Color.parseColor("#ffffff"));
+                fax.setBackgroundColor(Color.parseColor("#ffffff"));
                 addressLayout.setVisibility(View.VISIBLE);
                 chooser.setVisibility(View.GONE);
+                spinner.setVisibility(View.VISIBLE);
+
+
+                addresstext.setText("Branch");
 
 
                 // Create an adapter as shown below
                 bankingAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, finalBanking);
                 spinner.setAdapter(bankingAdapter);
-
-
-
-
 
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -433,15 +541,20 @@ public class MainActivity extends AppCompatActivity {
         others.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                TransitionManager.beginDelayedTransition(findViewById(R.id.animationid), new AutoTransition());
+                spinner.setVisibility(View.VISIBLE);
                 bank.setBackgroundColor(Color.parseColor("#ffffff"));
+                fax.setBackgroundColor(Color.parseColor("#ffffff"));
                 others.setBackgroundColor(Color.parseColor("#58FF58"));
-                isBanking = false;
+                isBanking = BANKING_TYPE_MOBILE_BANK;
                 addressLayout.setVisibility(View.GONE);
                 chooser.setVisibility(View.VISIBLE);
                 // Create an adapter as shown below
                 mobileBankingAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, finalmobileBanking);
                 spinner.setAdapter(mobileBankingAdapter);
+
+                addresstext.setText("Address");
+
 
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -456,9 +569,9 @@ public class MainActivity extends AppCompatActivity {
                             PG.setEnabled(false);
                         }
 
-                        if(s.equals("FAX")){
+                        if (s.equals("FAX")) {
                             addressLayout.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             addressLayout.setVisibility(View.GONE);
                         }
                     }
@@ -469,6 +582,23 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 });
+            }
+        });
+        fax.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TransitionManager.beginDelayedTransition(findViewById(R.id.animationid), new AutoTransition());
+                bank.setBackgroundColor(Color.parseColor("#ffffff"));
+                others.setBackgroundColor(Color.parseColor("#ffffff"));
+                fax.setBackgroundColor(Color.parseColor("#58FF58"));
+                isBanking = BANKING_TYPE_FAX;
+                addressLayout.setVisibility(View.VISIBLE);
+                chooser.setVisibility(View.GONE);
+                spinner.setVisibility(View.GONE);
+                PG.setText("FAX");
+
+
+                // Create an adapter as shown below
             }
         });
 
@@ -526,8 +656,31 @@ public class MainActivity extends AppCompatActivity {
                         PG.requestFocus();
                     } else {
                         boolean isOk = true;
-                        if (!isBanking) {
-                            if (pg.equals("FAX") && TextUtils.isEmpty(addressstr)) {
+                        if (isBanking == BANKING_TYPE_BANK) {
+                            if (TextUtils.isEmpty(receiverName)) {
+                                name.setError("Field Can Not Be Empty!");
+                                name.requestFocus();
+                                isOk = false;
+                            }
+                        }
+                        if (isBanking == BANKING_TYPE_FAX) {
+
+                            if (TextUtils.isEmpty(receiverName)) {
+                                name.setError("Field Can Not Be Empty!");
+                                name.requestFocus();
+                                isOk = false;
+                            }
+
+                            if (TextUtils.isEmpty(receiverphonestr)) {
+                                receiverphone.setError("Field Can Not Be Empty!");
+                                receiverphone.requestFocus();
+                                isOk = false;
+                            }
+                        }
+
+
+                        if (isBanking == BANKING_TYPE_FAX || isBanking == BANKING_TYPE_BANK) {
+                            if (TextUtils.isEmpty(addressstr)) {
                                 address.setError("Field Can Not Empty!");
                                 address.requestFocus();
                                 isOk = false;
@@ -547,7 +700,17 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("isBanking", String.valueOf(isBanking));
                             Log.e("chooserText", chooserText);
 
-                            model.setISPERSONAL(isBanking ? "Bank" : TextUtils.isEmpty(chooserText) ? "" : chooserText);
+
+                            String personalValue;
+                            if (isBanking == BANKING_TYPE_BANK) {
+                                personalValue = "Bank";
+                            } else if (isBanking == BANKING_TYPE_MOBILE_BANK) {
+                                personalValue = isPersonal ? "Personal" : "Agent";
+                            } else {
+                                personalValue = "FAX";
+                            }
+
+                            model.setISPERSONAL(personalValue);
                             model.setTRANSACTIONID(trx);
                             model.setPAYMENT_RM(TextUtils.isEmpty(rmAmount) ? "" : rmAmount);
                             model.setRM_RATE(TextUtils.isEmpty(rateStr) ? "" : rateStr);
@@ -556,52 +719,20 @@ public class MainActivity extends AppCompatActivity {
                             model.setDATE(currentDateandTime);
                             model.setPAYMENTGATEWAY(TextUtils.isEmpty(pg) ? "" : pg);
 
-
-                            JSONObject jsonObject = new JSONObject();
                             try {
-                                jsonObject.put("I", model.getUSERID());
-                                jsonObject.put("T", trx);
-                                jsonObject.put("D", currentDateandTime);
-
-
-                                String p = "[C]================================\n" +
-                                        "[L]Transaction ID: [R]" + model.getTRANSACTIONID() + "\n" +
-                                        "[L]Sender's Phone: [R]" + phonestr + "\n" +
-                                        "[C]================================\n" +
-                                        "[L]Rec Name: [R]" + model.getRECEIVERNAME() + "\n" +
-                                        "[L]Rec Phone: [R]" + model.getRECEIVERS_PHONE() + "\n" +
-                                        "[L]Address: [R]" + model.getADDRESS() + "\n" +
-                                        "[L]RM Rate: [R]" + model.getRM_RATE() + "\n" +
-                                        "[L]RM Amount: [R]" + model.getPAYMENT_RM() + "\n" +
-                                        "[C]================================\n" +
-                                        "[L]BDT Amount: [R]" + model.getPAYMENNT_BDT() + "\n" +
-                                        "[L]Payment GW: [R]" + model.getPAYMENTGATEWAY() + "\n" +
-                                        "[L]AC/MOB NO: [R]" + model.getPAYMENTPHONENUMBER() + "\n" +
-                                        "[L]Receiver Type: [R]" + model.getISPERSONAL() + "\n" +
-                                        "[L]Date: [R]" + model.getDATE() + "\n" +
-                                        "[C]================================\n" +
-                                        "\n" +
-                                        "[C]<qrcode size='30'>" + jsonObject + "</qrcode>";
-                                try {
-                                    EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
-                                    printer.printFormattedText(p);
-
-                                    name.setText(null);
-                                    phone.setText(null);
-                                    amount.setText(null);
-//                                    PG.setText(null);
-                                    PN.setText(null);
-                                    RMEDT.setText(null);
-                                    receiverphone.setText(null);
-                                    address.setText(null);
-                                    setSharedPreference("rate", model.getRM_RATE());
-                                    helper.saveMessage(model);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                printData(model, trx, currentDateandTime, phonestr);
+                            } catch (EscPosConnectionException e) {
+                                Log.e("Error", e.toString());
+                            } catch (EscPosEncodingException e) {
+                                Log.e("Error", e.toString());
+                            } catch (EscPosBarcodeException e) {
+                                Log.e("Error", e.toString());
+                            } catch (EscPosParserException e) {
+                                Log.e("Error", e.toString());
                             } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                                Log.e("Error", e.toString());
                             }
+
                         }
                     }
                 }
@@ -627,6 +758,62 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    void printData(PaymentModel model, String trx, String currentDateandTime, String phonestr) throws EscPosConnectionException, EscPosEncodingException, EscPosBarcodeException, EscPosParserException, JSONException {
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("I", model.getUSERID());
+        jsonObject.put("T", trx);
+        jsonObject.put("D", currentDateandTime);
+
+
+        String p = "[C]================================\n" +
+                "[L]Transaction ID: [R]" + model.getTRANSACTIONID() + "\n" +
+                "[L]Sender's Phone: [R]" + phonestr + "\n" +
+                "[C]================================\n" +
+                "[L]Rec Name: [R]" + model.getRECEIVERNAME() + "\n" +
+                "[L]Rec Phone: [R]" + model.getRECEIVERS_PHONE() + "\n" +
+                "[L]Address: [R]" + model.getADDRESS() + "\n" +
+                "[L]RM Rate: [R]" + model.getRM_RATE() + "\n" +
+                "[L]RM Amount: [R]" + model.getPAYMENT_RM() + "\n" +
+                "[C]================================\n" +
+                "[L]BDT Amount: [R]" + model.getPAYMENNT_BDT() + "\n" +
+                "[L]Payment GW: [R]" + model.getPAYMENTGATEWAY() + "\n" +
+                "[L]AC/MOB NO: [R]" + model.getPAYMENTPHONENUMBER() + "\n" +
+                "[L]Receiver Type: [R]" + model.getISPERSONAL() + "\n" +
+                "[L]Date: [R]" + model.getDATE() + "\n" +
+                "[C]================================\n" +
+                "\n" +
+                "[C]<qrcode size='30'>" + jsonObject + "</qrcode>";
+
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(MainActivity.this, "There is a problem with the bluetooth device", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (mBluetoothAdapter.isEnabled()) {
+
+
+            EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
+            printer.printFormattedText(p, 100f).disconnectPrinter();
+            name.setText(null);
+            phone.setText(null);
+            amount.setText(null);
+//                                    PG.setText(null);
+            PN.setText(null);
+            RMEDT.setText(null);
+            receiverphone.setText(null);
+            address.setText(null);
+            setSharedPreference("rate", model.getRM_RATE());
+            helper.saveMessage(model);
+
+        } else {
+            Toast.makeText(MainActivity.this, "Please turn on your bluetooth.", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
     private void showHistory() {
         AlertDialog dialog1;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -634,7 +821,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView showHistory = vi.findViewById(R.id.historyContainer);
 
         Spinner spinner1 = vi.findViewById(R.id.spinner);
-        String[] list = new String[]{"All", "Bank", "Mobile Banking"};
+        String[] list = new String[]{"All", "Bank", "Mobile Banking", "FAX"};
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
 
@@ -646,11 +833,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<PaymentModel> models = new ArrayList<>();
         ArrayList<PaymentModel> banks = new ArrayList<>();
         ArrayList<PaymentModel> nonbanks = new ArrayList<>();
-
-
-
-
-
+        ArrayList<PaymentModel> faxlist = new ArrayList<>();
 
 
         if (c == null) {
@@ -689,8 +872,10 @@ public class MainActivity extends AppCompatActivity {
             if (!pgstr.equals("Others")) {
                 if (finalmobileBanking.contains(pgstr)) {
                     nonbanks.add(model);
-                } else {
+                } else if (finalBanking.contains(pgstr)) {
                     banks.add(model);
+                } else {
+                    faxlist.add(model);
                 }
             }
         }
@@ -704,25 +889,28 @@ public class MainActivity extends AppCompatActivity {
         showHistory.setAdapter(adapter2);
 
 
-
-
-
-
         spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Log.e("position",String.valueOf(position));
+                Log.e("position", String.valueOf(position));
                 switch (position) {
                     case 0: {
                         RVAdapter adapter = new RVAdapter(MainActivity.this, models);
                         showHistory.setAdapter(adapter);
                         break;
-                    } case 1:{
+                    }
+                    case 1: {
                         RVAdapter adapter = new RVAdapter(MainActivity.this, banks);
                         showHistory.setAdapter(adapter);
                         break;
-                    }case 2:{
+                    }
+                    case 2: {
                         RVAdapter adapter = new RVAdapter(MainActivity.this, nonbanks);
+                        showHistory.setAdapter(adapter);
+                        break;
+                    }
+                    case 3: {
+                        RVAdapter adapter = new RVAdapter(MainActivity.this, faxlist);
                         showHistory.setAdapter(adapter);
                         break;
                     }
@@ -737,8 +925,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
-
 
 
         builder.setView(vi);
@@ -888,6 +1074,7 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog dialog;
 
     void showScanResultDialog(JSONObject jsonObject) {
+        Toast.makeText(this, "showIng Toast: " + jsonObject.toString(), Toast.LENGTH_LONG).show();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View vi = getLayoutInflater().inflate(R.layout.result, null, false);
@@ -914,11 +1101,26 @@ public class MainActivity extends AppCompatActivity {
                     name.setText(names.getText().toString());
                     phone.setText(senderphoneNumbers.getText().toString());
                     // amount.setText(amounts.getText().toString());
+
+                    if (finalmobileBanking.contains(paymentGateways.getText().toString())) {
+                        others.performClick();
+                    } else if (finalBanking.contains(paymentGateways.getText().toString())) {
+                        bank.performClick();
+                    } else {
+                        fax.performClick();
+                    }
+
+
                     PG.setText(paymentGateways.getText().toString());
                     PN.setText(paymentNumbers.getText().toString());
                     // TRXID.setText(trxids.getText().toString());
                     address.setText(addressres.getText().toString());
                     receiverphone.setText(receiverphonesss.getText().toString());
+                    if (paymenttyperes.getText().toString().equals("Personal")) {
+                        personalText.performClick();
+                    } else if (paymenttyperes.getText().toString().equals("Agent")) {
+                        agentText.performClick();
+                    }
 
 
                 } catch (Exception e) {
@@ -970,13 +1172,15 @@ public class MainActivity extends AppCompatActivity {
                 senderphoneNumbers.setText(phonestr);
                 trxids.setText(trxid);
                 receiverphonesss.setText(receiverPhoneStr);
+
+
             }
 
             c.close();
 
 
         } catch (Exception e) {
-            Log.e("error", e.toString());
+            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
         }
 
 

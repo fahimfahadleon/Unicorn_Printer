@@ -4,6 +4,7 @@ package com.unicornms.unicornprinter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     ArrayList<PaymentModel> models;
     Context context;
-    public RVAdapter (Context context, ArrayList<PaymentModel> models){
+
+    public RVAdapter(Context context, ArrayList<PaymentModel> models) {
         this.context = context;
         this.models = models;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,14 +39,30 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         holder.amount.setText(model.getPAYMENNT_BDT());
         holder.type.setText(model.getPAYMENTGATEWAY());
         holder.isPersonal.setText(model.getISPERSONAL());
+        holder.receiverName.setText(model.getRECEIVERNAME());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = "Receiver: "+holder.receiverPhone.getText().toString()+"\n"+
-                         "AC/MOB NO: "+model.getPAYMENTPHONENUMBER()+"\n"+
-                        "Payment GW: "+holder.type.getText().toString()+"\n"+
-                        "BDT: "+holder.amount.getText().toString()+"\n"+
-                        "Type: "+holder.isPersonal.getText().toString();
+                String s = "";
+
+
+                s = s + "Receiver: " + holder.receiverPhone.getText().toString() + "\n";
+
+
+                if (model.getISPERSONAL().equals("Bank") || model.getISPERSONAL().equals("FAX")) {
+                    s = s + "\nRc Name: " + model.getRECEIVERNAME();
+                }
+
+
+                s = s + "\nAC/MOB NO: " + model.getPAYMENTPHONENUMBER() + "\n" +
+                        "Payment GW: " + holder.type.getText().toString() + "\n";
+                if (model.getISPERSONAL().equals("Bank") || model.getISPERSONAL().equals("FAX")) {
+                    s = s + "Branch/Address: " + model.getADDRESS();
+                }
+
+                s = s + "\nBDT: " + holder.amount.getText().toString() + "\n" +
+                        "Type: " + holder.isPersonal.getText().toString();
+
 
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("txt", s);
@@ -59,12 +78,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         return models.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView senderPhone;
         TextView receiverPhone;
+        TextView receiverName;
         TextView isPersonal;
         TextView type;
         TextView amount;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             senderPhone = itemView.findViewById(R.id.senderNumber);
@@ -72,6 +93,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             amount = itemView.findViewById(R.id.amount);
             type = itemView.findViewById(R.id.type);
             isPersonal = itemView.findViewById(R.id.isPersonal);
+            receiverName = itemView.findViewById(R.id.receiverName);
         }
     }
 }

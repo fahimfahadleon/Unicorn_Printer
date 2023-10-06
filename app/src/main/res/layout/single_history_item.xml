@@ -23,6 +23,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/senderNumber"/>
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,10 +33,21 @@
             app:layout_constraintTop_toBottomOf="@id/senderNumber"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:id="@+id/receiverNumber"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="type"
+            android:text="receiver name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/receiverNumber"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+
+            android:id="@+id/receiverName"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PG"
             app:layout_constraintStart_toEndOf="@id/senderNumber"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="16dp"

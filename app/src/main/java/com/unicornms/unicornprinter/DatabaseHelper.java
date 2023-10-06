@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getUserDetails(String userID,String TRANSACTIONID) {
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.rawQuery("select * from "+TABLE_NAME+" where userID = ? and TID = ?",new String[]{userID,TRANSACTIONID});
+        return database.rawQuery("select * from "+TABLE_NAME+" where userID = ? and TransactionID = ?",new String[]{userID,TRANSACTIONID});
     }
 
 
